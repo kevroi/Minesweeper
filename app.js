@@ -1,4 +1,4 @@
-// ColoredPoints.js (c) 2012 matsuda
+// Code modified from ColoredPoints.js (c) 2012 matsuda
 // Vertex shader program
 var VSHADER_SOURCE =
 	'attribute vec4 a_Position;\n' +
@@ -10,7 +10,7 @@ var VSHADER_SOURCE =
 // Fragment shader program
 var FSHADER_SOURCE =
 	'precision mediump float;\n' +
-	'uniform vec4 u_FragColor;\n' +  // uniform変数
+	'uniform vec4 u_FragColor;\n' +
 	'void main() {\n' +
 	'  gl_FragColor = u_FragColor;\n' +
 	'}\n';
@@ -18,8 +18,8 @@ var FSHADER_SOURCE =
 function main() {
 	// Retrieve <canvas> element
 	var canvas = document.getElementById('webgl');
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
+	canvas.width  = window.innerWidth;
+	canvas.height = window.innerHeight;
 
 	// Get the rendering context for WebGL
 	var gl = getWebGLContext(canvas);
@@ -34,14 +34,14 @@ function main() {
 		return;
 	}
 
-	// // Get the storage location of a_Position
+	// Get WebGL storage location of a_Position
 	var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
 	if (a_Position < 0) {
 		console.log('Failed to get the storage location of a_Position');
 		return;
 	}
 
-	// Get the storage location of u_FragColor
+	// Get WebGL storage location of u_FragColor
 	var u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
 	if (!u_FragColor) {
 		console.log('Failed to get the storage location of u_FragColor');
@@ -72,6 +72,8 @@ for(var i = 0; i < total_mines; i++) {
     mine_points.push([mine_x, mine_y]);
 }
 
+
+// Function to evaluate whether mouse press was near mine
 function withinRange(x, y, target_points) {
     for(var i = 0; i < target_points.length; i++) {
         var x_diff = Math.abs(x-target_points[i][0]);
@@ -87,16 +89,17 @@ function click(ev, gl, canvas, a_Position, u_FragColor) {
 	var y = ev.clientY; // y coordinate of a mouse pointer
 	var rect = ev.target.getBoundingClientRect();
 
+	// Convert from <canvas> coordinate system to WebGL coordinate system
 	x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
 	y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
 
-	// Store the coordinates to g_points array
+	// Store the coordinates to g_points
 	g_points.push([x, y]);
-	// Store the coordinates to g_points array
-	if (withinRange(x, y, mine_points)) {      // First quadrant
-		g_colors.push([1.0, 0.0, 0.0, 1.0]);  // Red
+
+	if (withinRange(x, y, mine_points)) {
+		g_colors.push([1.0, 0.0, 0.0, 1.0]);  // Go red
 	} else {                         
-		g_colors.push([0.0, 1.0, 0.0, 1.0]);  // White
+		g_colors.push([0.0, 1.0, 0.0, 1.0]);  // Go green
 	}
 
 	// Clear <canvas>
@@ -114,7 +117,4 @@ function click(ev, gl, canvas, a_Position, u_FragColor) {
 		// Draw
 		gl.drawArrays(gl.POINTS, 0, 1);
 	}
-    console.log(g_points)
 }
-
-console.log(mine_points)
