@@ -61,14 +61,14 @@ function main() {
 var g_points = [];  // The array for the position of a mouse press
 var g_colors = [];  // The array to store the color of a point
 var mine_points = []; //The array to store the position of Mines
-var total_mines = 10;
+var total_mines = 25;
 var mine_radius = 0.1;
 
 
 // fill in mine locations
 for(var i = 0; i < total_mines; i++) {
-    var mine_x = Math.random();
-    var mine_y = Math.random();
+    var mine_x = Math.random()*2 - 1;
+    var mine_y = Math.random()*2 - 1;
     mine_points.push([mine_x, mine_y]);
 }
 
